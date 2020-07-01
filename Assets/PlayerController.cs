@@ -9,22 +9,16 @@ public class PlayerController : MonoBehaviour
     // [ ] - Handle MonsterCollision
 
     public float jumpFactor = 2f;
-    public int maxHearts = 3;
 
     private bool isJumping = false;
     private bool isFalling = false;
     private Rigidbody2D rgbody;
     private Animator anim;
 
-    private GameObject hearts;
-    private int remaningHearts;
-
     void Start()
     {
         rgbody = gameObject.GetComponent<Rigidbody2D>();
         anim = gameObject.GetComponent<Animator>();
-        hearts = GameObject.FindGameObjectWithTag("HeartsContainer");
-        remaningHearts = maxHearts;
     }
 
     void Update() => performMovementActions();
@@ -46,12 +40,7 @@ public class PlayerController : MonoBehaviour
 
     //void onMonsterCollision(Collision2D collision = null) => Debug.Log("Monster Collision");
     void onMonsterCollision(Collision2D collision = null) {
-        remaningHearts--;
-        hearts.SendMessage("DecreaseHeart", 1);
-
-        if (remaningHearts <= 0) {
-            Time.timeScale = 0;
-        }
+        this.SendMessage("TakeDamage", 1);
     }
 
     private void performMovementActions() => performJumps();
